@@ -32,8 +32,8 @@ searchBtn.onclick = function(){
 
 }
 
-function deleteRowById(id){
-    fetch('http://localhost:5000/delete/' + id, {
+function deleteRowById(_id){
+    fetch('http://localhost:5000/delete/' + _id, {
         method: 'DELETE'
     })
     .then(response => response.json())
@@ -44,13 +44,13 @@ function deleteRowById(id){
     });
 }
 
-function editRowById(id, name){
+function editRowById(_id, name){
     const updateSection = document.querySelector('#update-row');
     document.querySelector('#update-name-input').value = name;
-    document.querySelector('#update-id').innerText = id + ".";
+    document.querySelector('#update-id').innerText = _id + ".";
     updateSection.hidden = false;
-    console.log(id);
-    document.querySelector('#update-row-btn').dataset.id = id;
+    console.log(_id);
+    document.querySelector('#update-row-btn').dataset._id = _id;
 }
 
 updateBtn.onclick = function(){
@@ -64,7 +64,7 @@ updateBtn.onclick = function(){
             'Content-type': 'application/json'
         },
         body: JSON.stringify({
-            id: updateId.dataset.id,
+            _id: updateId.dataset._id,
             name: updateNameInput.value
         })
     })
@@ -110,8 +110,8 @@ function insertRowIntoTable(data){
         }
     }
 
-    tableHTML += `<td><button class="delete-row-btn" data-id=${data.id}>DELETE</td>`;
-    tableHTML += `<td><button class="edit-row-btn" data-id=${data.id} name=${data.name}>EDIT</td>`;
+    tableHTML += `<td><button class="delete-row-btn" data-id=${data._id}>DELETE</td>`;
+    tableHTML += `<td><button class="edit-row-btn" data-id=${data._id} name=${data.name}>EDIT</td>`;
 
     tableHTML += "</tr>";
 
@@ -137,13 +137,13 @@ function loadHTMLTable(data){
 
     let tableHTML = "";
 
-    data.forEach(function ({id, name, date_added}){
+    data.forEach(function ({_id, name, date_added}){
         tableHTML += "<tr>";
-        tableHTML += `<td>${id}</td>`;
+        tableHTML += `<td>${_id}</td>`;
         tableHTML += `<td>${name}</td>`;
         tableHTML += `<td>${new Date(date_added).toLocaleString()}</td>`;
-        tableHTML += `<td><button class="delete-row-btn" data-id=${id}>DELETE</td>`;
-        tableHTML += `<td><button class="edit-row-btn" data-id=${id} name=${name}>EDIT</td>`;
+        tableHTML += `<td><button class="delete-row-btn" data-id=${_id}>DELETE</td>`;
+        tableHTML += `<td><button class="edit-row-btn" data-id=${_id} name=${name}>EDIT</td>`;
         tableHTML += "</tr>";
     })
     table.innerHTML = tableHTML;

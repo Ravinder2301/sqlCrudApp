@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     user: process.env.USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    port: process.env.DB_POR
+    port: process.env.DB_PORT
 });
 
 connection.connect((err) => {
@@ -32,7 +32,7 @@ class DbService {
                     if (err) reject(new Error(err.message));
 
                     // Now, you can proceed with your actual query
-                    const selectDataQuery = "SELECT * FROM crudtable;";
+                    const selectDataQuery = "SELECT * FROM crud_table;";
                     connection.query(selectDataQuery, (err, results) => {
                         if (err) reject(new Error(err.message));
                         resolve(results);
@@ -51,7 +51,7 @@ class DbService {
         try {
             const dateAdded = new Date();
             const insertId = await new Promise((resolve, reject) => {
-                const insertDataQuery = "INSERT INTO crudtable (name, date_added) VALUES (?, ?);";
+                const insertDataQuery = "INSERT INTO crud_table (name, date_added) VALUES (?, ?);";
                 connection.query(insertDataQuery, [name, dateAdded], (err, result) => {
                     if (err) {
                         reject(new Error(err.message));
@@ -65,7 +65,7 @@ class DbService {
     
             console.log(insertId);
             return{
-                id: insertId,
+                _id: insertId,
                 name: name,
                 dateAdded: dateAdded
             };
@@ -75,13 +75,13 @@ class DbService {
         }
     }
 
-    async deleteRowById(id){
+    async deleteRowById(_id){
         try {
-            id = parseInt(id, 10);
+            _id = parseInt(_id, 10);
             const deleteId = await new Promise((resolve, reject) => {
-                const deleteDataQuery = "DELETE FROM crudtable WHERE id = ?";
+                const deleteDataQuery = "DELETE FROM crud_table WHERE _id = ?";
 
-                connection.query(deleteDataQuery, [id], (err, result) => {
+                connection.query(deleteDataQuery, [_id], (err, result) => {
                     if (err) {
                         reject(new Error(err.message));
                     }else {
@@ -90,6 +90,7 @@ class DbService {
                 });
             });
     
+            console.log(deleteId)
             return deleteId === 1 ? true : false;
     
         } catch (error) {
@@ -98,13 +99,13 @@ class DbService {
         }
     }
     
-    async updateNameById(id, name){
+    async updateNameById(_id, name){
         try {
-            id = parseInt(id, 10);
+            _id = parseInt(_id, 10);
             const updateName = await new Promise((resolve, reject) => {
-                const updateNameQuery = "UPDATE crudtable SET name = ? WHERE id = ?;";
+                const updateNameQuery = "UPDATE crud_table SET name = ? WHERE _id = ?;";
 
-                connection.query(updateNameQuery, [name, id], (err, result) => {
+                connection.query(updateNameQuery, [name, _id], (err, result) => {
                     if (err) {
                         reject(new Error(err.message));
                     }else {
@@ -124,7 +125,7 @@ class DbService {
     async searchByName(name){
         try {
             const searchName = await new Promise((resolve, reject) => {
-                const searchNameQuery = "SELECT * FROM crudtable WHERE name = ?;";
+                const searchNameQuery = "SELECT * FROM crud_table WHERE name = ?;";
 
                 connection.query(searchNameQuery, [name], (err, result) => {
                     if (err) {

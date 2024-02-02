@@ -36,11 +36,11 @@ app.get('/getAll', (request, response) => {
 
 // update
 app.patch('/update', (request, response) => {
-    const { id, name } = request.body;
+    const { _id, name } = request.body;
 
     const db = dbService.getDbServiceInstance();
 
-    const result = db.updateNameById(id, name);
+    const result = db.updateNameById(_id, name);
 
     result
     .then(data => response.json({ success: data }))
@@ -48,13 +48,13 @@ app.patch('/update', (request, response) => {
 })
 
 // delete
-app.delete('/delete/:id', (request, response) => {
-    const { id } = (request.params);
+app.delete('/delete/:_id', (request, response) => {
+    const { _id } = (request.params);
 
     const db = dbService.getDbServiceInstance();
 
-    const result = db.deleteRowById(id);
-
+    console.log(_id);
+    const result = db.deleteRowById(_id);
     result
     .then(data => response.json({ success: data }))
     .catch(err => console.log(err));
